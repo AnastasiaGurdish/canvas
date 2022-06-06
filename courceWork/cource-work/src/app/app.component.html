@@ -1,0 +1,10 @@
+<div height="100%" width="100%">
+    <canvas id="graphCanvas" (mouseup)="startDraw($event)" (mousemove)="draw($event)" (mousedown)="endDraw($event)"></canvas>
+    <div>
+        <button (click)="loadImage()">Load image
+          <input id="inputFile" type="file" style="display:none" (change)="handle($event)">
+        </button>
+        <button (click)="loadOriginalImage()">Load original image</button>
+        <input type="color" id="color" (input)="getColor($event)">
+    </div>
+</div>
