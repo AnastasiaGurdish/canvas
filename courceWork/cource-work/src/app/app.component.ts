@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { DrawService } from './services/draw.service';
+import { Methods } from './model/methods.enum';
 import { ImageLoaderService } from './services/image-loader.service';
+import { RestoreFactoryService } from './services/restore-image/restore-factory.service';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,9 @@ export class AppComponent implements OnInit {
   private ctx: CanvasRenderingContext2D | undefined;
   private isDrawing = false;
   public color: any;
-  constructor(private imageLoaderService: ImageLoaderService) {
+  acceptableMethod: Methods.FIRST | Methods.SECOND = Methods.FIRST;
+  constructor(private imageLoaderService: ImageLoaderService,
+    private restoreFactoryService: RestoreFactoryService) {
   }
 
   ngOnInit() {
@@ -38,22 +41,28 @@ export class AppComponent implements OnInit {
 
   public startDraw(event: any): void {
     this.isDrawing = false;
-    console.log(this.color);
   }
 
   public draw(event: any): void {
     if (this.isDrawing) {
-      var x = event.offsetX;
-      var y = event.offsetY;
+      var x = (event.offsetX - this.canvas.height) / 2;
+      var y = (event.offsetY - this.canvas.height) / 2;
       if (!!this.ctx) {
         this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(x - 0.5, y - 0.5, 10, 10);
+        this.ctx.fillRect(x, y, 3, 3);
         this.ctx.fill();
       }
     }
   }
 
   public getColor(event: any): void {
-  this.color = (<HTMLInputElement>document.getElementById('color')).value;
+    this.color = (<HTMLInputElement>document.getElementById('color')).value;
+  }
+
+  public applyRestoreMethod(): void {
+    if (!!this.acceptableMethod) {
+      let method = this.restoreFactoryService.getRestoreService(this.acceptableMethod, this.ctx, this.canvas);
+      method.applyMethod(this.imageLoaderService.getImageFromCanvas(this.ctx));
+    }
   }
 }

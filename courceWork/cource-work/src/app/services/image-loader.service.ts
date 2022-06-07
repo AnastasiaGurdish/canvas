@@ -7,11 +7,10 @@ export class ImageLoaderService {
     constructor() { }
 
     public loadOriginalImage(context: CanvasRenderingContext2D | undefined, canvas: any): any {
-       
-       this.image = new Image();
-       this.image.src = this.objectURL;
-       this.clearCanvas(context, canvas);
-       this.draw(context, canvas);
+        this.image = new Image();
+        this.image.src = this.objectURL;
+        this.clearCanvas(context, canvas);
+        this.draw(context, canvas);
     }
 
     public loadImage(event: any, context: CanvasRenderingContext2D | undefined, canvas: any): void {
@@ -22,11 +21,15 @@ export class ImageLoaderService {
         this.draw(context, canvas);
     }
 
-    private clearCanvas(context: CanvasRenderingContext2D | undefined, canvas: any) {
-        context?.clearRect(0,0,canvas.width,canvas.height); 
+    public getImageFromCanvas(context: CanvasRenderingContext2D | undefined): Uint8ClampedArray | undefined{
+        return context?.getImageData(0,0, this.image.width, this.image.height).data;
     }
 
-    private draw(context: CanvasRenderingContext2D | undefined, canvas: any):void {
+    private clearCanvas(context: CanvasRenderingContext2D | undefined, canvas: any) {
+        context?.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    private draw(context: CanvasRenderingContext2D | undefined, canvas: any): void {
         this.image.onload = () => {
             // get the scale
             var scale = Math.min(canvas.width / this.image.width, canvas.height / this.image.height);

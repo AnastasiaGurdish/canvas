@@ -1,10 +1,22 @@
 <div height="100%" width="100%">
     <canvas id="graphCanvas" (mouseup)="startDraw($event)" (mousemove)="draw($event)" (mousedown)="endDraw($event)"></canvas>
     <div>
-        <button (click)="loadImage()">Load image
+        <button mat-raised-button (click)="loadImage()">Load image
           <input id="inputFile" type="file" style="display:none" (change)="handle($event)">
         </button>
-        <button (click)="loadOriginalImage()">Load original image</button>
+        <button mat-raised-button (click)="loadOriginalImage()">Load original image</button>
         <input type="color" id="color" (input)="getColor($event)">
+    </div>
+    <div>
+        <section class="methods-section">
+            <label class="methods-margin">Method:</label>
+            <mat-radio-group [(ngModel)]="acceptableMethod">
+                <mat-radio-button class="methods-margin" value=Methods.FIRST>First</mat-radio-button>
+                <mat-radio-button class="methods-margin" value=Methods.SECOND>Second</mat-radio-button>
+            </mat-radio-group>
+        </section>
+    </div>
+    <div>
+        <button mat-raised-button color="accent" (click)="applyRestoreMethod()">Apply method</button>
     </div>
 </div>
